@@ -1,0 +1,21 @@
+{
+  "overview": "A full-featured Sales CRM and Lead Management app with role-based access for Admin, Coordinator, Telecaller, and Sales Executive. Manage leads through their entire lifecycle — from first contact through call workflows, follow-ups, and deal closure — with reporting and admin settings.",
+  "features": [
+    "Role-based dashboards with live KPI cards (Total Leads, Follow-ups Due, Deals Closed, Conversion %)",
+    "Lead management with CRUD, search, filters, CSV import/export, and lead detail history",
+    "Guided call workflow capturing post-call outcomes with category-specific sub-flows (Agri, Civil Equip, Industrial Equip)",
+    "Follow-up scheduler with Today, Missed, Upcoming, and Completed tabs",
+    "Call and Lead reports filterable by date range, user, source, and campaign",
+    "Admin-only settings panel for managing master data (products, campaigns, sources, statuses, branches)"
+  ],
+  "category": "productivity",
+  "tags": [
+    "crm",
+    "lead-management",
+    "sales",
+    "productivity",
+    "role-based-access",
+    "reporting"
+  ],
+  "last_updated": "2026-05-06T18:32:56.141Z"
+}

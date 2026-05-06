@@ -1,0 +1,315 @@
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserInfo = 
+ record {
+   id: principal;
+   name: text;
+   role: text;
+ };
+type UserId = principal;
+type UpdateLeadInput = 
+ record {
+   altPhone: opt text;
+   assignedUserId: opt UserId;
+   campaign: opt text;
+   email: opt text;
+   id: nat;
+   name: opt text;
+   notes: opt text;
+   phone: opt text;
+   priority: opt Priority;
+   productInterest: opt text;
+   source: opt text;
+   status: opt LeadStatus;
+ };
+type UpdateFollowUpInput = 
+ record {
+   completionNotes: opt text;
+   id: nat;
+   isCompleted: opt bool;
+   notes: opt text;
+   reminderEnabled: opt bool;
+   scheduledDate: opt text;
+   scheduledTime: opt text;
+ };
+type Timestamp = int;
+type SubsidyFields = 
+ record {
+   block: text;
+   district: text;
+   division: opt text;
+   docStatus: DocStatus;
+   farmerName: text;
+   productCategoryId: nat;
+   productId: nat;
+   village: text;
+ };
+type Source = 
+ record {
+   id: nat;
+   isActive: bool;
+   name: text;
+ };
+type SaleFields = 
+ record {
+   followUpDate: opt Timestamp;
+   place: opt text;
+   priority: Priority;
+   productCategoryId: nat;
+   productId: nat;
+ };
+type ProductCategory = 
+ record {
+   id: nat;
+   isActive: bool;
+   name: text;
+ };
+type Product = 
+ record {
+   categoryId: nat;
+   id: nat;
+   isActive: bool;
+   name: text;
+ };
+type Priority = 
+ variant {
+   Cold;
+   Hot;
+   Warm;
+ };
+type LogCallInput = 
+ record {
+   callStatus: CallStatus;
+   callTimestamp: Timestamp;
+   details: opt CallDetails;
+   duration: opt nat;
+   leadId: nat;
+   notes: opt text;
+   outcome: opt CallOutcome;
+ };
+type LeadStatus = 
+ variant {
+   ClosedLost;
+   ClosedWon;
+   Interested;
+   New;
+   Proposal;
+ };
+type LeadReportFilter = 
+ record {
+   campaign: opt text;
+   dateRange: opt DateRange;
+   source: opt text;
+   userId: opt UserId;
+ };
+type LeadReport = 
+ record {
+   closedLost: nat;
+   closedWon: nat;
+   conversionPercent: nat;
+   newLeads: nat;
+   proposalSent: nat;
+   qualified: nat;
+   totalLeads: nat;
+ };
+type LeadFilter = 
+ record {
+   assignedUserId: opt UserId;
+   campaign: opt text;
+   priority: opt Priority;
+   searchText: opt text;
+   source: opt text;
+   status: opt LeadStatus;
+ };
+type Lead = 
+ record {
+   altPhone: opt text;
+   assignedUserId: opt UserId;
+   campaign: opt text;
+   createdAt: Timestamp;
+   email: opt text;
+   id: nat;
+   name: text;
+   notes: opt text;
+   phone: text;
+   priority: Priority;
+   productInterest: opt text;
+   source: opt text;
+   status: LeadStatus;
+   updatedAt: Timestamp;
+ };
+type FollowUpFilter = 
+ variant {
+   Completed;
+   Missed;
+   Today;
+   Upcoming;
+ };
+type FollowUp = 
+ record {
+   completionNotes: opt text;
+   createdAt: Timestamp;
+   id: nat;
+   isCompleted: bool;
+   leadId: nat;
+   notes: opt text;
+   reminderEnabled: bool;
+   scheduledDate: text;
+   scheduledTime: text;
+ };
+type DocStatus = 
+ variant {
+   Collected;
+   Pending;
+ };
+type DateRange = 
+ record {
+   fromTs: Timestamp;
+   toTs: Timestamp;
+ };
+type CreateLeadInput = 
+ record {
+   altPhone: opt text;
+   assignedUserId: opt UserId;
+   campaign: opt text;
+   email: opt text;
+   name: text;
+   notes: opt text;
+   phone: text;
+   priority: Priority;
+   productInterest: opt text;
+   source: opt text;
+   status: LeadStatus;
+ };
+type CreateFollowUpInput = 
+ record {
+   leadId: nat;
+   notes: opt text;
+   reminderEnabled: bool;
+   scheduledDate: text;
+   scheduledTime: text;
+ };
+type Campaign = 
+ record {
+   budget: opt nat;
+   endDate: opt text;
+   id: nat;
+   isActive: bool;
+   name: text;
+   source: opt text;
+   startDate: opt text;
+ };
+type CallStatus = 
+ variant {
+   Connected;
+   NotConnected;
+ };
+type CallReportFilter = 
+ record {
+   dateRange: opt DateRange;
+   userId: opt UserId;
+ };
+type CallReport = 
+ record {
+   connectedCalls: nat;
+   interestedCount: nat;
+   notConnectedCalls: nat;
+   notInterestedCount: nat;
+   notReachableCount: nat;
+   switchOffCount: nat;
+   totalCalls: nat;
+   totalDurationSecs: nat;
+ };
+type CallOutcome = 
+ variant {
+   Interested;
+   NotInterested;
+   NotReachable;
+   SwitchOff;
+ };
+type CallLog = 
+ record {
+   callStatus: CallStatus;
+   callTimestamp: Timestamp;
+   callerId: UserId;
+   createdAt: Timestamp;
+   details: opt CallDetails;
+   duration: opt nat;
+   id: nat;
+   leadId: nat;
+   notes: opt text;
+   outcome: opt CallOutcome;
+ };
+type CallDetails = 
+ variant {
+   Agri: AgriDetails;
+   CivilEquip: SaleFields;
+   IndustrialEquip: SaleFields;
+ };
+type Branch = 
+ record {
+   id: nat;
+   isActive: bool;
+   name: text;
+ };
+type AgriSubType = 
+ variant {
+   Sale;
+   Subsidy;
+ };
+type AgriDetails = 
+ record {
+   saleFields: opt SaleFields;
+   subType: AgriSubType;
+   subsidyFields: opt SubsidyFields;
+ };
+service : {
+  _initializeAccessControl: () -> ();
+  addBranch: (name: text) -> (Branch);
+  addCampaign: (input: Campaign) -> (Campaign);
+  addLead: (input: CreateLeadInput) -> (Lead);
+  addProduct: (categoryId: nat, name: text) -> (Product);
+  addProductCategory: (name: text) -> (ProductCategory);
+  addSource: (name: text) -> (Source);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  assignLead: (id: nat, userId: UserId) -> (bool);
+  assignUserRole: (user: principal, role: text) -> ();
+  deleteBranch: (id: nat) -> (bool);
+  deleteCampaign: (id: nat) -> (bool);
+  deleteFollowUp: (id: nat) -> (bool);
+  deleteLead: (id: nat) -> (bool);
+  deleteProduct: (id: nat) -> (bool);
+  deleteProductCategory: (id: nat) -> (bool);
+  deleteSource: (id: nat) -> (bool);
+  getCallReport: (filter: CallReportFilter) -> (CallReport) query;
+  getCallerUserProfile: () -> (opt UserInfo) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getCallsForLead: (leadId: nat) -> (vec CallLog) query;
+  getFollowUpsForLead: (leadId: nat) -> (vec FollowUp) query;
+  getLeadById: (id: nat) -> (opt Lead) query;
+  getLeadReport: (filter: LeadReportFilter) -> (LeadReport) query;
+  getUserProfile: (user: principal) -> (opt UserInfo) query;
+  isCallerAdmin: () -> (bool) query;
+  listBranches: () -> (vec Branch) query;
+  listCampaigns: () -> (vec Campaign) query;
+  listLeads: (filter: opt LeadFilter) -> (vec Lead) query;
+  listProductCategories: () -> (vec ProductCategory) query;
+  listProducts: (categoryId: opt nat) -> (vec Product) query;
+  listSources: () -> (vec Source) query;
+  listUsers: () -> (vec UserInfo) query;
+  logCall: (input: LogCallInput) -> (CallLog);
+  logFollowUp: (input: CreateFollowUpInput) -> (FollowUp);
+  queryFollowUps: (filterType: FollowUpFilter) -> (vec FollowUp) query;
+  saveCallerUserProfile: (name: text) -> ();
+  updateBranch: (id: nat, name: text) -> (bool);
+  updateCampaign: (input: Campaign) -> (bool);
+  updateFollowUpStatus: (input: UpdateFollowUpInput) -> (bool);
+  updateLead: (input: UpdateLeadInput) -> (bool);
+  updateProduct: (id: nat, name: text) -> (bool);
+  updateProductCategory: (id: nat, name: text) -> (bool);
+  updateSource: (id: nat, name: text) -> (bool);
+}
